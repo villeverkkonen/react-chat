@@ -1,0 +1,22 @@
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "description": "Back-end for React Chat App",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/villeverkkonen/react-chat.git"
+  },
+  "author": "Ville Verkkonen",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/villeverkkonen/react-chat/issues"
+  },
+  "homepage": "https://github.com/villeverkkonen/react-chat#readme",
+  "dependencies": {
+    "socket.io": "^2.2.0"
+  }
+}
