@@ -2,13 +2,16 @@ import React from 'react';
 import MessageList from './components/MessageList';
 import ChatForm from './components/ChatForm';
 import { AppState } from './store';
-import { sendMessage } from './store/chat/actions';
-import { ChatState } from './store/chat/types';
+import { changeNickname } from './store/nickname/actions';
+import { sendMessage } from './store/message/actions';
+import { NicknameState } from './store/nickname/types';
+import { MessageState } from './store/message/types';
 import { connect } from 'react-redux';
 
 interface AppProps {
   sendMessage: typeof sendMessage;
-  chat: ChatState;
+  nicknameReducer: NicknameState;
+  messageReducer: MessageState;
 };
 
 export type UpdateMessageParam = React.SyntheticEvent<{ value: string }>;
@@ -21,14 +24,15 @@ class App extends React.Component<AppProps> {
   };
 
   componentDidMount() {
+    const nickname = "Guest" + Math.floor(Math.random() * 1001);
+    this.setState({ nickname });
+
     this.props.sendMessage({
       user: 'Chat Bot',
       message:
-        'Hello!',
+        'Hello ' + nickname + '!',
       timestamp: new Date().getTime()
     });
-    const nickname = "Guest" + Math.floor(Math.random() * 1001);
-    this.setState({ nickname });
   }
 
   updateNickname = (event: UpdateNicknameParam) => {
@@ -51,7 +55,7 @@ class App extends React.Component<AppProps> {
   render() {
     return (
       <div className="parent">
-        <MessageList messages={this.props.chat.messages} />
+        <MessageList messages={this.props.messageReducer.messages} />
         <ChatForm
           nickname={this.state.nickname}
           message={this.state.message}
@@ -65,10 +69,11 @@ class App extends React.Component<AppProps> {
 }
 
 const mapStateToProps = (state: AppState) => ({
-  chat: state.chat
+  nicknameReducer: state.nicknameReducer,
+  messageReducer: state.messageReducer
 });
 
 export default connect(
   mapStateToProps,
-  { sendMessage }
+  { changeNickname, sendMessage }
 )(App);

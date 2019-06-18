@@ -1,10 +1,12 @@
 import { createStore, combineReducers, applyMiddleware } from 'redux';
 import thunk from 'redux-thunk';
 import { composeWithDevTools } from 'redux-devtools-extension';
-import { chatReducer } from './chat/reducers';
+import { messageReducer } from './message/reducer';
+import { nicknameReducer } from './nickname/reducer';
 
 const rootReducer = combineReducers({
-  chat: chatReducer
+  nicknameReducer: nicknameReducer,
+  messageReducer: messageReducer
 });
 
 export type AppState = ReturnType<typeof rootReducer>;

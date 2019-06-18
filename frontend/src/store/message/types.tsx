@@ -4,7 +4,7 @@ export interface Message {
   timestamp: number;
 };
 
-export interface ChatState {
+export interface MessageState {
   messages: Message[];
 };
 
@@ -15,4 +15,4 @@ interface SendMessageAction {
   payload: Message;
 };
 
-export type ChatActionTypes = SendMessageAction;
+export type MessageActionTypes = SendMessageAction;

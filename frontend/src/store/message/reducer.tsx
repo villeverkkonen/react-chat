@@ -1,17 +1,17 @@
 import {
-  ChatState,
+  MessageState,
   SEND_MESSAGE,
-  ChatActionTypes
+  MessageActionTypes
 } from './types';
 
-const initialState: ChatState = {
+const initialState: MessageState = {
   messages: []
 };
 
-export function chatReducer(
+export function messageReducer(
   state = initialState,
-  action: ChatActionTypes
-): ChatState {
+  action: MessageActionTypes
+): MessageState {
     switch (action.type) {
       case SEND_MESSAGE:
         return {
