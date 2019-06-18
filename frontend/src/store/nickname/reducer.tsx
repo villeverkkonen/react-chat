@@ -6,7 +6,7 @@ import {
 } from './types';
 
 const initialState: NicknameState = {
-  nickname: ''
+  nickname: 'Guest' + Math.floor(Math.random() * 1001)
 };
 
 export function nicknameReducer(

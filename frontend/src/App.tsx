@@ -29,8 +29,7 @@ class App extends React.Component<AppProps> {
 
     this.props.sendMessage({
       user: 'Chat Bot',
-      message:
-        'Hello ' + nickname + '!',
+      message: 'Hello ' + nickname + '!',
       timestamp: new Date().getTime()
     });
   }
@@ -55,7 +54,7 @@ class App extends React.Component<AppProps> {
   render() {
     return (
       <div className="parent">
-        <MessageList messages={this.props.messageReducer.messages} />
+        <MessageList messageReducer={this.props.messageReducer} />
         <ChatForm
           nickname={this.state.nickname}
           message={this.state.message}

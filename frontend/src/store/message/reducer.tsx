@@ -5,7 +5,18 @@ import {
 } from './types';
 
 const initialState: MessageState = {
-  messages: []
+  messages: [
+    // {
+    //   user: 'Chat Bot',
+    //   message: 'Testi 1',
+    //   timestamp: new Date().getTime()
+    // },
+    // {
+    //   user: 'Chat Bot',
+    //   message: 'Testi 2',
+    //   timestamp: new Date().getTime()
+    // }
+  ]
 };
 
 export function messageReducer(

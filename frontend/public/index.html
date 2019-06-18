@@ -27,8 +27,8 @@
         socket.on('message', (msg) => {
           var timestamp = new Date().getTime();
           var listItem = $("<div class='message-item' key=" + timestamp + "></div>");
-          $(listItem).append("<h3>From: Guest</h3>");
-          $(listItem).append("<p>" + msg + "</p>");
+          $(listItem).append("<p style='font-weight: bold; margin-bottom: 0;'>From: " + $("#nickname-input").val() + "</p>");
+          $(listItem).append("<p style='margin-top: 0;'>" + msg + "</p>");
           $("#message-list").append(listItem);
         })
       });
