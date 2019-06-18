@@ -5,21 +5,18 @@ const http = require('http').createServer(app);
 const io = require('socket.io')(http);
 
 app.use(express.static('build'));
+// app.use(express.static(__dirname + '/frontend/build'));
 
 app.get('/', (req, res) => res.sendFile(__dirname + '/index.html'));
 
 io.on('connection', (socket) => {
-  console.log("Connected");
-  io.emit('broadcast', '[Server]: Welcome!');
-
   socket.on('message', (msg) => {
     console.log("message: " + msg);
     socket.broadcast.emit('message', msg);
   });
 
   socket.on('disconnect', () => {
-    console.log("Disconnected");
-    io.emit('broadcast', '[Server]: Good bye!');
+    
   });
 });
 

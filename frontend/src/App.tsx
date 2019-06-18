@@ -12,10 +12,12 @@ interface AppProps {
 };
 
 export type UpdateMessageParam = React.SyntheticEvent<{ value: string }>;
+export type UpdateNicknameParam = React.SyntheticEvent<{ value: string }>;
 
 class App extends React.Component<AppProps> {
   state = {
-    message: ''
+    message: '',
+    nickname: ''
   };
 
   componentDidMount() {
@@ -25,6 +27,12 @@ class App extends React.Component<AppProps> {
         'Hello!',
       timestamp: new Date().getTime()
     });
+    const nickname = "Guest" + Math.floor(Math.random() * 1001);
+    this.setState({ nickname });
+  }
+
+  updateNickname = (event: UpdateNicknameParam) => {
+    this.setState({ nickname: event.currentTarget.value });
   }
 
   updateMessage = (event: UpdateMessageParam) => {
@@ -33,7 +41,7 @@ class App extends React.Component<AppProps> {
 
   sendMessage = (message: string) => {
     this.props.sendMessage({
-      user: 'Guest',
+      user: this.state.nickname,
       message: message,
       timestamp: new Date().getTime()
     });
@@ -45,10 +53,11 @@ class App extends React.Component<AppProps> {
       <div className="parent">
         <MessageList messages={this.props.chat.messages} />
         <ChatForm
-          userName='Guest'
+          nickname={this.state.nickname}
           message={this.state.message}
-          updateMessage={this.updateMessage}
           sendMessage={this.sendMessage}
+          updateMessage={this.updateMessage}
+          updateNickname={this.updateNickname}
         />
       </div>
     );
