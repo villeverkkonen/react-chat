@@ -10,6 +10,11 @@ app.use(express.static('build'));
 app.get('/', (req, res) => res.sendFile(__dirname + '/index.html'));
 
 io.on('connection', (socket) => {
+
+  socket.on('join', (nickname) => {
+    socket.broadcast.emit('join', 'Joined chat', nickname);
+  });
+
   socket.on('message', (msg, nickname) => {
     socket.broadcast.emit('message', msg, nickname);
   });

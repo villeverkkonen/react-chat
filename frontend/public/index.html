@@ -11,7 +11,7 @@
       integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
       crossorigin="anonymous">
     </script>
-    <title>React App</title>
+    <title>Manochat</title>
   </head>
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
@@ -20,9 +20,17 @@
     <script>
       $(() => {
         var socket = io();
+        socket.emit('join', $("#nickname-input").val());
         $('#send-message-btn').click(() => {
           socket.emit('message', $("#chat-input").val(), $("#nickname-input").val());
           $('#chat-input').val('');
+        });
+        socket.on('join', (msg, nickname) => {
+          var timestamp = new Date().getTime();
+          var listItem = $(`<div class='message-item' key=${timestamp}></div>`);
+          $(listItem).append(`<p style='font-weight: bold; margin-bottom: 0;'>From: ${nickname}</p>`);
+          $(listItem).append(`<p style='margin-top: 0;'>${msg}</p>`);
+          $("#message-list").append(listItem);
         });
         socket.on('message', (msg, nickname) => {
           var timestamp = new Date().getTime();
