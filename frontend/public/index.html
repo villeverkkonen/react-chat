@@ -21,14 +21,14 @@
       $(() => {
         var socket = io();
         $('#send-message-btn').click(() => {
-          socket.emit('message', $("#chat-input").val());
+          socket.emit('message', $("#chat-input").val(), $("#nickname-input").val());
           $('#chat-input').val('');
         });
-        socket.on('message', (msg) => {
+        socket.on('message', (msg, nickname) => {
           var timestamp = new Date().getTime();
-          var listItem = $("<div class='message-item' key=" + timestamp + "></div>");
-          $(listItem).append("<p style='font-weight: bold; margin-bottom: 0;'>From: " + $("#nickname-input").val() + "</p>");
-          $(listItem).append("<p style='margin-top: 0;'>" + msg + "</p>");
+          var listItem = $(`<div class='message-item' key=${timestamp}></div>`);
+          $(listItem).append(`<p style='font-weight: bold; margin-bottom: 0;'>From: ${nickname}</p>`);
+          $(listItem).append(`<p style='margin-top: 0;'>${msg}</p>`);
           $("#message-list").append(listItem);
         })
       });

@@ -10,9 +10,8 @@ app.use(express.static('build'));
 app.get('/', (req, res) => res.sendFile(__dirname + '/index.html'));
 
 io.on('connection', (socket) => {
-  socket.on('message', (msg) => {
-    console.log("message: " + msg);
-    socket.broadcast.emit('message', msg);
+  socket.on('message', (msg, nickname) => {
+    socket.broadcast.emit('message', msg, nickname);
   });
 
   socket.on('disconnect', () => {
