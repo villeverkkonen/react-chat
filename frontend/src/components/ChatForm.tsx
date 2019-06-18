@@ -32,8 +32,9 @@ const ChatForm: React.SFC<ChatInterfaceProps> = ({
         onKeyPress={keyPress}
         className="chat-input"
         placeholder="Type a message..."
+        id="chat-input"
       />
-      <button onClick={send}>Send</button>
+      <button onClick={send} id="send-message-btn">Send</button>
     </div>
   );
 }

@@ -4,18 +4,21 @@ const app = express();
 const http = require('http').createServer(app);
 const io = require('socket.io')(http);
 
-app.use(express.static(path.join(__dirname, '../build')));
+app.use(express.static('build'));
 
 app.get('/', (req, res) => res.sendFile(__dirname + '/index.html'));
 
-io.on('connect', (socket) => {
+io.on('connection', (socket) => {
+  console.log("Connected");
   io.emit('broadcast', '[Server]: Welcome!');
 
   socket.on('message', (msg) => {
-    io.emit('message', msg);
+    console.log("message: " + msg);
+    socket.broadcast.emit('message', msg);
   });
 
-  socket.on('disconnect', function () {
+  socket.on('disconnect', () => {
+    console.log("Disconnected");
     io.emit('broadcast', '[Server]: Good bye!');
   });
 });

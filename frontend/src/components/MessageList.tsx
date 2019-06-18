@@ -7,7 +7,7 @@ interface MessageListProps {
 
 const MessageList: React.SFC<MessageListProps> = ({ messages }) => {
   return (
-    <div className="chat-history">
+    <div className="message-list" id="message-list">
       {messages.map(message => (
         <div className="message-item" key={message.timestamp}>
           <h3>From: {message.user}</h3>
