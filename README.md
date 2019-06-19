@@ -1,4 +1,4 @@
-Chap app made with:
+Chat app made with:
 - React
 - Node
 - Redux
