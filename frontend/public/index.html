@@ -21,24 +21,47 @@
       $(() => {
         var socket = io();
         socket.emit('join', $("#nickname-input").val());
+
+        socket.on('join', msg => {
+          var timestamp = new Date().getTime();
+          var listItem = $(`<div class='message-item' key=${timestamp}></div>`);
+          $(listItem).append(`<p style='font-weight: bold; color: green;'>${msg}</p>`);
+          $("#message-list").append(listItem);
+        });
+
+        socket.on('usersOnline', usersOnline => {
+          $("#user-list").empty();
+          usersOnline.map(user => {
+            $("#user-list").append(`<li id=${user}>${user}</li>`);
+          });
+        });
+
         $('#send-message-btn').click(() => {
-          socket.emit('message', $("#chat-input").val(), $("#nickname-input").val());
+          socket.emit('message', $("#nickname-input").val(), $("#chat-input").val());
           $('#chat-input').val('');
         });
-        socket.on('join', (msg, nickname) => {
+
+        $("#chat-input").keypress((e) => {
+          if (e.which === 13 && $("#chat-input").val() !== "") {
+            socket.emit('message', $("#nickname-input").val(), $("#chat-input").val());
+            $('#chat-input').val('');
+          }
+        });
+
+        socket.on('message', (user, msg) => {
           var timestamp = new Date().getTime();
           var listItem = $(`<div class='message-item' key=${timestamp}></div>`);
-          $(listItem).append(`<p style='font-weight: bold; margin-bottom: 0;'>From: ${nickname}</p>`);
+          $(listItem).append(`<p style='font-weight: bold; margin-bottom: 0;'>From: ${user}</p>`);
           $(listItem).append(`<p style='margin-top: 0;'>${msg}</p>`);
           $("#message-list").append(listItem);
         });
-        socket.on('message', (msg, nickname) => {
+
+        socket.on('leave', msg => {
           var timestamp = new Date().getTime();
           var listItem = $(`<div class='message-item' key=${timestamp}></div>`);
-          $(listItem).append(`<p style='font-weight: bold; margin-bottom: 0;'>From: ${nickname}</p>`);
-          $(listItem).append(`<p style='margin-top: 0;'>${msg}</p>`);
+          $(listItem).append(`<p style='font-weight: bold; color: red;'>${msg}</p>`);
           $("#message-list").append(listItem);
-        })
+        });
       });
     </script>
   </body>

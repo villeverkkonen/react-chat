@@ -1,51 +1,93 @@
 import React from 'react';
-import { UpdateMessageParam } from '../App';
-import { UpdateNicknameParam } from '../App';
+import { Dispatch } from 'redux';
+import { connect } from 'react-redux';
+import { sendMessage } from '../store/message/actions';
+import { Message } from '../store/message/types';
+import messageReducer from '../store/message/reducer';
 
-interface ChatInterfaceProps {
-  nickname: string;
-  message: string;
-  sendMessage: (message: string) => void;
-  updateMessage: (event: UpdateMessageParam) => void;
-  updateNickname: (event: UpdateNicknameParam) => void;
+interface ChatFormProps {
+  sendMessage: (message: Message) => void;
 }
 
-const ChatForm: React.SFC<ChatInterfaceProps> = ({
-  nickname,
-  message,
-  sendMessage,
-  updateMessage,
-  updateNickname
-}) => {
-  function keyPress(e: React.KeyboardEvent<any>) {
+type UpdateMessageParam = React.SyntheticEvent<{ value: string }>;
+type UpdateNicknameParam = React.SyntheticEvent<{ value: string }>;
+
+export class ChatForm extends React.Component<ChatFormProps> {
+  state = {
+    user: '',
+    message: ''
+  };
+
+  componentDidMount() {
+    const user = "Guest" + Math.floor(Math.random() * 1001);
+    this.setState({ user });
+
+    this.sendChatMessageWithParams({
+      user: 'Chat Bot',
+      message: 'Hello ' + user + '! Change the nickname and start chatting.',
+      timestamp: new Date().getTime()
+    });
+  }
+
+  keyPress = (e: React.KeyboardEvent<any>) => {
     if (e.key === "Enter") {
-      send();
+      this.sendChatMessage();
     }
   }
 
-  function send() {
-    sendMessage(message);
+  sendChatMessage = (): void => {
+    if (this.state.message !== '') {
+      this.props.sendMessage({
+        user: this.state.user,
+        message: this.state.message,
+        timestamp: new Date().getTime()
+      });
+      this.setState({ message: '' });
+    }
+  };
+
+  sendChatMessageWithParams = (message: Message) => {
+    this.props.sendMessage(message);
   }
 
-  return (
-    <div className="chat-form">
-      <input
-        id="nickname-input"
-        value={nickname}
-        onChange={updateNickname}
-      />
-      <br />
-      <input
-        id="chat-input"
-        value={message}
-        onChange={updateMessage}
-        onKeyPress={keyPress}
-        className="chat-input"
-        placeholder="Type a message..."
-      />
-      <button onClick={send} id="send-message-btn">Send</button>
-    </div>
-  );
+  updateUser = (event: UpdateNicknameParam) => {
+    this.setState({ user: event.currentTarget.value });
+  }
+
+  updateMessage = (event: UpdateMessageParam) => {
+    this.setState({ message: event.currentTarget.value });
+  };
+
+  render() {
+    const { user, message } = this.state;
+
+    return (
+      <div>
+        <div className="chat-form">
+          <input
+            id="nickname-input"
+            value={user}
+            onChange={this.updateUser}
+          />
+          <br />
+          <input
+            id="chat-input"
+            value={message}
+            onChange={this.updateMessage}
+            onKeyPress={this.keyPress}
+            className="chat-input"
+            placeholder="Type a message..."
+            autoFocus
+          />
+          <button onClick={this.sendChatMessage} id="send-message-btn">Send</button>
+        </div>
+      </div>
+    );
+  }
 }
 
-export default ChatForm;
+const mapDispatchToProps = (dispatch: any): ChatFormProps => ({
+  sendMessage: (message: Message) => dispatch(sendMessage(message))
+});
+
+export default connect(null, mapDispatchToProps)(ChatForm);

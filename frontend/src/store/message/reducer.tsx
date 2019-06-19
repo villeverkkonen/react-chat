@@ -32,3 +32,5 @@ export function messageReducer(
         return state;
     };
 };
+
+export default messageReducer;

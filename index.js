@@ -4,23 +4,31 @@ const app = express();
 const http = require('http').createServer(app);
 const io = require('socket.io')(http);
 
-app.use(express.static('build'));
-// app.use(express.static(__dirname + '/frontend/build'));
+// app.use(express.static('build'));
+app.use(express.static(__dirname + '/frontend/build'));
 
 app.get('/', (req, res) => res.sendFile(__dirname + '/index.html'));
 
-io.on('connection', (socket) => {
+var usersOnline = [];
 
-  socket.on('join', (nickname) => {
-    socket.broadcast.emit('join', 'Joined chat', nickname);
+io.on('connect', socket => {
+  var username = '';
+
+  socket.on('join', user => {
+    usersOnline.push(user);
+    username = user;
+    socket.broadcast.emit('join', `${user} joined the chat.`);
+    io.emit('usersOnline', usersOnline);
   });
 
-  socket.on('message', (msg, nickname) => {
-    socket.broadcast.emit('message', msg, nickname);
+  socket.on('message', (user, msg) => {
+    socket.broadcast.emit('message', user, msg);
   });
 
   socket.on('disconnect', () => {
-    
+    usersOnline = usersOnline.filter(user => user !== username);
+    socket.broadcast.emit('leave', `${username} left the chat.`);
+    io.emit('usersOnline', usersOnline);
   });
 });
 

@@ -1,15 +1,15 @@
 import React from 'react';
-import App from '../App';
+import ChatPage from '../components/ChatPage';
 import NotFound from '../components/NotFound';
 import { Route, BrowserRouter as Router, Switch } from 'react-router-dom';
 
-class Routes extends React.Component {
+class AppRouter extends React.Component {
   render() {
     return (
       <Router>
         <div>
           <Switch>
-            <Route exact path="/" component={App} />
+            <Route exact path="/" component={ChatPage} />
             <Route component={NotFound} />
           </Switch>
         </div>
@@ -18,4 +18,4 @@ class Routes extends React.Component {
   };
 }
 
-export default Routes;
+export default AppRouter;
