@@ -19,10 +19,16 @@
   },
   "homepage": "https://github.com/villeverkkonen/react-chat#readme",
   "dependencies": {
+    "@typescript-eslint/eslint-plugin": "^2.25.0",
+    "@typescript-eslint/parser": "^2.25.0",
+    "eslint": "^6.8.0",
+    "eslint-config-prettier": "^6.10.1",
+    "eslint-plugin-prettier": "^3.1.2",
     "express": "^4.17.1",
-    "socket.io": "^2.2.0"
+    "prettier": "^2.0.2",
+    "socket.io": "^2.3.0"
   },
   "devDependencies": {
-    "nodemon": "^1.19.1"
+    "nodemon": "^1.19.4"
   }
 }
