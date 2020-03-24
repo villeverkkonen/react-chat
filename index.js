@@ -1,4 +1,3 @@
-const path = require('path');
 const express = require('express');
 const app = express();
 const http = require('http').createServer(app);
@@ -9,26 +8,38 @@ app.use(express.static(__dirname + '/frontend/build'));
 
 app.get('/', (req, res) => res.sendFile(__dirname + '/index.html'));
 
-var usersOnline = [];
+// let number = 1;
+// setInterval(() => {
+//   number += 1;
+//   console.log(number)
+//   io.sockets.emit('apiCall', number);
+// }, 2000);
 
 io.on('connect', socket => {
-  var username = '';
+  let username = '';
 
   socket.on('join', user => {
-    usersOnline.push(user);
     username = user;
     socket.broadcast.emit('join', `${user} joined the chat.`);
-    io.emit('usersOnline', usersOnline);
   });
 
-  socket.on('message', (user, msg) => {
-    socket.broadcast.emit('message', user, msg);
+  socket.on('message', msg => {
+    console.log("MESSAGE:");
+    console.log(msg);
+    socket.broadcast.emit('message', msg);
+  });
+
+  socket.on('chatbot', msg => {
+    socket.emit('message', msg);
+  });
+
+  socket.on('update_user_list', username => {
+    socket.emit('update_user_list', username)
   });
 
   socket.on('disconnect', () => {
-    usersOnline = usersOnline.filter(user => user !== username);
-    socket.broadcast.emit('leave', `${username} left the chat.`);
-    io.emit('usersOnline', usersOnline);
+    console.log("DISCONNECT");
+    socket.broadcast.emit('message', `${username} left the chat.`);
   });
 });
 

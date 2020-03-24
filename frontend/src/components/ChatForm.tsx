@@ -1,32 +1,33 @@
 import React from 'react';
-import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
 import { sendMessage } from '../store/message/actions';
+import { changeUsername } from '../store/user/actions';
 import { Message } from '../store/message/types';
-import messageReducer from '../store/message/reducer';
+import { connectSocket } from '../store/socket/actions';
+import { userJoined } from '../store/user/actions';
 
 interface ChatFormProps {
   sendMessage: (message: Message) => void;
+  changeUsername: (username: string) => void;
+  connectSocket: (username: string) => void;
+  userJoined: (username: string) => void;
 }
 
 type UpdateMessageParam = React.SyntheticEvent<{ value: string }>;
-type UpdateNicknameParam = React.SyntheticEvent<{ value: string }>;
+type UpdateUsernameParam = React.SyntheticEvent<{ value: string }>;
 
 export class ChatForm extends React.Component<ChatFormProps> {
   state = {
-    user: '',
+    username: '',
     message: ''
   };
 
   componentDidMount() {
-    const user = "Guest" + Math.floor(Math.random() * 1001);
-    this.setState({ user });
+    const username = "Guest" + Math.floor(Math.random() * 1001);
+    this.setState({ username });
 
-    this.sendChatMessageWithParams({
-      user: 'Chat Bot',
-      message: 'Hello ' + user + '! Change the nickname and start chatting.',
-      timestamp: new Date().getTime()
-    });
+    this.props.connectSocket(username);
+    this.props.userJoined(username);
   }
 
   keyPress = (e: React.KeyboardEvent<any>) => {
@@ -38,7 +39,7 @@ export class ChatForm extends React.Component<ChatFormProps> {
   sendChatMessage = (): void => {
     if (this.state.message !== '') {
       this.props.sendMessage({
-        user: this.state.user,
+        username: this.state.username,
         message: this.state.message,
         timestamp: new Date().getTime()
       });
@@ -50,8 +51,9 @@ export class ChatForm extends React.Component<ChatFormProps> {
     this.props.sendMessage(message);
   }
 
-  updateUser = (event: UpdateNicknameParam) => {
-    this.setState({ user: event.currentTarget.value });
+  updateUsername = (event: UpdateUsernameParam) => {
+    this.setState({ username: event.currentTarget.value });
+    this.props.changeUsername(event.currentTarget.value);
   }
 
   updateMessage = (event: UpdateMessageParam) => {
@@ -59,15 +61,15 @@ export class ChatForm extends React.Component<ChatFormProps> {
   };
 
   render() {
-    const { user, message } = this.state;
+    const { username, message } = this.state;
 
     return (
       <div>
         <div className="chat-form">
           <input
             id="nickname-input"
-            value={user}
-            onChange={this.updateUser}
+            value={username}
+            onChange={this.updateUsername}
           />
           <br />
           <input
@@ -87,7 +89,10 @@ export class ChatForm extends React.Component<ChatFormProps> {
 }
 
 const mapDispatchToProps = (dispatch: any): ChatFormProps => ({
-  sendMessage: (message: Message) => dispatch(sendMessage(message))
+  sendMessage: (message: Message) => dispatch(sendMessage(message)),
+  changeUsername: (username: string) => dispatch(changeUsername(username)),
+  connectSocket: (username: string) => dispatch(connectSocket(username)),
+  userJoined: (username: string) => dispatch(userJoined(username))
 });
 
 export default connect(null, mapDispatchToProps)(ChatForm);
