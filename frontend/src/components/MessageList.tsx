@@ -28,7 +28,7 @@ export class MessageList extends React.Component<MessageListProps, { apiCall: st
     const messageListElement: Element = this.messageListRef.current as Element;
     const shouldScroll: boolean = messageListElement.scrollTop + messageListElement.clientHeight !== messageListElement.scrollHeight;
 
-    const socket = socketIOClient('http://localhost:3001/');
+    const socket = socketIOClient('/');
     // socket.on('apiCall', (data: string) => this.setState({ apiCall: data }));
     // if (shouldScroll) {
     //   this.scrollToBottom(messageListElement);

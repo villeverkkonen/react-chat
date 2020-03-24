@@ -1,11 +1,10 @@
 import { CONNECTION_CHANGED } from '../actions';
 
 const initialState = {
-  connected: false,
-  port: '3001'
+  connected: false
 };
 
-function socketReducer(state = initialState, action: { type: string, port: string, connected: boolean }) {
+function socketReducer(state = initialState, action: { type: string, connected: boolean }) {
   let reduced;
   switch (action.type) {
     case CONNECTION_CHANGED:
