@@ -5,4 +5,6 @@ Chat app made with:
 - Socket.io
 - TypeScript
 
+### [App in Heroku](https://manochat.herokuapp.com/)
+
 ![manochat](https://github.com/villeverkkonen/react-chat/blob/master/documentation/images/manochat.png)
