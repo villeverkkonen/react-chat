@@ -3,17 +3,9 @@ const app = express()
 const http = require('http').createServer(app)
 const io = require('socket.io')(http)
 
-// app.use(express.static('build'));
 app.use(express.static(__dirname + '/frontend/build'))
 
-app.get('/', (req, res) => res.sendFile(__dirname + '/index.html'))
-
-// let number = 1;
-// setInterval(() => {
-//   number += 1;
-//   console.log(number)
-//   io.sockets.emit('apiCall', number);
-// }, 2000);
+app.get('/', (req, res) => res.sendFile(__dirname + '/frontend/index.html'))
 
 io.on('connect', (socket) => {
   let username = ''
